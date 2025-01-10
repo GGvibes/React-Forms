@@ -8,6 +8,13 @@ export default function SignUpForm( {setToken} ) {
 
   async function handleSubmit(event) {
     event.preventDefault();
+const validationError = validateForm({ username, password })
+if (validationError) {
+  setError(validationError)
+  return;
+}
+console.log("Form is valid. Submitting..")
+
     try {
         const response = await fetch("https://fsa-jwt-practice.herokuapp.com/signup", {
             method: "POST", 
@@ -37,6 +44,7 @@ export default function SignUpForm( {setToken} ) {
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
           />
                   
         </label>
@@ -47,6 +55,7 @@ export default function SignUpForm( {setToken} ) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
           />
                              
         </label>
@@ -56,4 +65,16 @@ export default function SignUpForm( {setToken} ) {
           
     </>
   );
+}
+function validateForm({ username, password }) {
+  
+  if (!username || username.length < 5 || username.length > 15) {
+    return "Username must be between 5 and 15 characters.";
+  }
+
+  if (!password || password.length < 8 || password.length > 20) {
+    return "Password must be between 8 and 20 characters.";
+  }
+
+  return null;
 }
