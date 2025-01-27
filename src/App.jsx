@@ -12,6 +12,7 @@ function App() {
       <div>
         <Authenticate token={token} setToken={setToken}/>
         <SignUpForm token={token} setToken ={setToken} />
+        {token ? <p>Sign up successful!</p> : <p></p>}
       </div>
     </>
   )

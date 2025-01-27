@@ -5,6 +5,7 @@ export default function SignUpForm({ setToken }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -26,10 +27,12 @@ export default function SignUpForm({ setToken }) {
         }
       );
       const result = await response.json();
-
+      
       setToken(result.token);
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -43,7 +46,10 @@ export default function SignUpForm({ setToken }) {
           Username:
           <input
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setError(null);
+            }}
             placeholder="username"
           />
         </label>
@@ -53,11 +59,16 @@ export default function SignUpForm({ setToken }) {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(null);
+            }}
             placeholder="password"
           />
         </label>
-        <button>Submit</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? "Submitting..." : "Submit"}
+        </button>
       </form>
     </>
   );
